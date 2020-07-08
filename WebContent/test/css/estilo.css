@@ -1,0 +1,15 @@
+@charset "ISO-8859-1";
+
+.resultItem {
+    padding 8px;::;
+}
+
+.Scanner {
+    background-color: lightgreen;
+}
+.Keyboard {
+    background-color: antiquewhite;
+}
+#resultsList div:first-of-type {
+    border: 1px solid black;
+}

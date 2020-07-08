@@ -1,0 +1,36 @@
+@charset "ISO-8859-1";
+
+html {
+	margin-top: 0px;
+	margin-left: 0px;
+}
+
+body {
+	cursor: pointer
+}
+
+a {
+	margin-bottom: 10px;
+}
+
+table {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+thead {
+	background-color: black;
+	color: white;
+}
+
+tr:nth-child(even) {
+	background-color: #ddd;
+}
+
+td {
+	width: 35%;
+}
+
+button {
+	
+}
