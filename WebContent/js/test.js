@@ -13,3 +13,23 @@ function buscar() { //BUSCAR EL ARTICULO TRAS ESCRIBIR O HACER COPY-PASTE Y ENVI
 			+ codigo1 + "," + descripcion1 + "," + cantidad1;
 	
 }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	//Si está probando una cadena vacía: 
+
+	if (myVar === '') {// hacer cosas};
+	//Si está buscando una variable que ha sido declarada pero no definida:
+	}
+	if (myVar === null) {// hacer cosas};
+	//Si está buscando una variable que puede no estar definida:
+	}
+	if (myVar === undefined) {// hacer cosas};
+	//Si está marcando ambos, es decir, cualquiera de las variables es nula o indefinida:
+	}
+	if (myVar == null) {// hacer cosas};
+	}
+	

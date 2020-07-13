@@ -1,0 +1,8 @@
+	String sql = "CREATE TABLE detalle_temporal_"+num_pedido 
+					+ "(  num_pedido character varying(100) NOT NULL,"
+					+ "  codigo_barra character varying(100) NOT NULL,"
+					+ "  descripcion character varying(100) NOT NULL,"
+					+ "  cantidad double precision NOT NULL,"
+					+ "  seccion character varying(100) NOT NULL,"
+					+ "  obs character varying(100) NOT NULL "
+					+ ")" ; // EMPEZAR POR DETALLE 1

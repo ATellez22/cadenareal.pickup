@@ -31,35 +31,44 @@
 					alt="Responsive image">
 
 				<form action="controller" method="post">
-					<input type="hidden" name="seleccion" value="ingresar">
-					<table border="0">
-						<tr>
-							<!-- COLUMNA -->
-							<td>Usuario:</td>
-							<!-- FILA -->
-							<td><input type="text" class="form-control"
-								name="txt_usuario" size="30"></td>
-						</tr>
 
-						<tr>
-							<td>Password:</td>
-							<!-- FILA -->
-							<td><input type="password" class="form-control"
-								name="txt_pass" size="50"></td>
-						</tr>
-					</table>
-					<br>
-					<div class="row">
-						<div class="col-md-4 col-lg-2">
-							<button type="submit" class="btn btn-light">Enviar</button>
-						</div>
-					</div>					
+					<div class="form-group">
+
+						<input type="hidden" name="seleccion" value="ingresar">
+
+						<!-- COLUMNA -->
+						<label for="exampleInputEmail1">Usuario:</label>
+						<!-- FILA -->
+						<input type="text" class="form-control" name="txt_usuario"
+							size="30">
+
+					</div>
+
+					<div class="form-group">
+
+						<label for="exampleInputEmail1">Password:</label>
+						<!-- FILA -->
+						<input type="password" class="form-control" name="txt_pass"
+							size="50">
+
+					</div>
+
+
+					<button type="submit" class="btn btn-primary" >Enviar</button>
+
+
 				</form>
 			</div>
 		</div>
 	</div>
 
 </body>
+
+	<script type="text/javascript">
+	
+		//document.body.style.zoom="300%"
+		
+	</script>
 
 <script type="text/javascript">	
 

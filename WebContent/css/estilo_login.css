@@ -14,7 +14,14 @@ img {
   	width: 130px; height: 130px;
 }
 
-form {
-	
-		
+html, body{
+	background-image: url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 100%;
+	font-family: 'Numans', sans-serif;
+}
+
+.selected{
+  background: red !important;
 }

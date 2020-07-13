@@ -39,103 +39,113 @@ public class controller extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 
 		String seleccion_pedido = request.getParameter("seleccion_pedido");
+		
+		
+		while(seleccion_pedido.startsWith("lista_pedidos_picker")) {
+			
+			
+			System.out.println("SELECCION PEDIDO: "+seleccion_pedido);
+			
+		}
 
-		try { 
-
-			Long.valueOf(seleccion_pedido); // CONVERTIR A LONG. SI SE PUEDE, CONTINUA EL PROCESO. SI NO, PASA AL CATCH
-											// COMO STRING. SI SE PUEDE, ENTONCES EL VALOR VIENE DE lista_pedidos_picker.jsp
-
-			RequestDispatcher rd;
-
-			request.setAttribute("usuario", login.getUsuario()); // ENVIO DEL USUARIO CONECTADO
-
-			// LISTA DE ITEMS POR PEDIDO
-
-			List<dto_pedido_detalle> lista = new ArrayList<>();
-
-			System.out.println(seleccion_pedido);
-
-			ped.setNum_pedido(seleccion_pedido);
-
-			try {
-
-				lista = metodo.Mostrar_detalle_pedido_picker(ped.getNum_pedido());
-
-				for (dto_pedido_detalle pedido_detalle : lista) {
-
-					System.out.println(pedido_detalle);
-
-				}
-
-				request.setAttribute("lista", lista);
-
-				// LISTA DE ITEMS POR PEDIDO
-
-				rd = request.getRequestDispatcher("/lista_items.jsp");
-				rd.forward(request, response);
-
-			} catch (SQLException e) {
-
-				e.printStackTrace();
-			}
-
-		} catch (NumberFormatException e1) { // NO SE PUEDE CONVERTIR
-
-			if (seleccion_pedido.equals("cancelar")) { // AL RETROCEDER DE LA LISTA DE ITEMS
-
-				request.setAttribute("usuario", login.getUsuario()); // ENVIO DEL USUARIO CONECTADO
-
-				// LISTA DE ITEMS POR PEDIDO
-
-				RequestDispatcher rd;
-
-				List<dto_pedido> lista = new ArrayList<>();
-
-				try {
-
-					lista = metodo.Mostrar_pedido_picker(login.getUsuario());
-
-					System.out.println(ped.getNum_pedido());
-
-					for (dto_pedido pedido : lista) {
-
-						System.out.println(lista);
-
-					}
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				request.setAttribute("lista", lista);
-
-				// LISTA DE ITEMS POR PEDIDO
-
-				rd = request.getRequestDispatcher("/lista_pedidos_picker.jsp");
-				rd.forward(request, response);
-
-			} else { // SELECCION DE FILA - ENVIO DE DATO - DESDE lista_items.jsp HACIA control_items.jsp
-
-				System.out.println("SELECCION PEDIDO: " + seleccion_pedido);
-
-				String[] parts = seleccion_pedido.split(",");
-				String codigo_barra = parts[0];
-				String descripcion = parts[1];
-				String cantidad = parts[2];
-				
-				RequestDispatcher rd;
-				
-				request.setAttribute("codigo_barra", codigo_barra);
-				request.setAttribute("descripcion", descripcion);
-				request.setAttribute("cantidad", cantidad);
-				
-				rd = request.getRequestDispatcher("/control_items.jsp"); // REDIRECCION
-				rd.forward(request, response);
-
-			}
-
-		}		
+//		try { 
+//
+//			Long.valueOf(seleccion_pedido); // CONVERTIR A LONG. SI SE PUEDE, CONTINUA EL PROCESO. SI NO, PASA AL CATCH
+//											// COMO STRING. SI SE PUEDE, ENTONCES EL VALOR VIENE DE lista_pedidos_picker.jsp
+//
+//			RequestDispatcher rd;
+//
+//			request.setAttribute("usuario", login.getUsuario()); // ENVIO DEL USUARIO CONECTADO
+//
+//			// LISTA DE ITEMS POR PEDIDO
+//
+//			List<dto_pedido_detalle> lista = new ArrayList<>();
+//
+//			System.out.println(seleccion_pedido);
+//
+//			ped.setNum_pedido(seleccion_pedido);
+//
+//			try {
+//
+//				lista = metodo.Mostrar_detalle_pedido_picker(ped.getNum_pedido());
+//
+//				for (dto_pedido_detalle pedido_detalle : lista) {
+//
+//					System.out.println(pedido_detalle);
+//
+//				}
+//
+//				request.setAttribute("lista", lista);
+//
+//				// LISTA DE ITEMS POR PEDIDO
+//
+//				rd = request.getRequestDispatcher("/lista_items.jsp");
+//				rd.forward(request, response);
+//
+//			} catch (SQLException e) {
+//
+//				e.printStackTrace();
+//			}
+//
+//		} catch (NumberFormatException e1) { // NO SE PUEDE CONVERTIR
+//
+//			if (seleccion_pedido.equals("cancelar_lista")) { // AL RETROCEDER DE LA LISTA DE ITEMS
+//
+//				request.setAttribute("usuario", login.getUsuario()); // ENVIO DEL USUARIO CONECTADO
+//
+//				// LISTA DE ITEMS POR PEDIDO
+//
+//				RequestDispatcher rd;
+//
+//				List<dto_pedido> lista = new ArrayList<>();
+//
+//				try {
+//
+//					lista = metodo.Mostrar_pedido_picker(login.getUsuario());
+//
+//					System.out.println(ped.getNum_pedido());
+//
+//					for (dto_pedido pedido : lista) {
+//
+//						System.out.println(lista);
+//
+//					}
+//
+//				} catch (SQLException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//
+//				request.setAttribute("lista", lista);
+//
+//				// LISTA DE ITEMS POR PEDIDO
+//
+//				rd = request.getRequestDispatcher("/lista_pedidos_picker.jsp");
+//				rd.forward(request, response);
+//
+//			} else  { // SELECCION DE FILA - ENVIO DE DATO - DESDE lista_items.jsp HACIA control_items.jsp
+//
+//				System.out.println("SELECCION PEDIDO: " + seleccion_pedido);
+//
+//				String[] parts = seleccion_pedido.split(", ");
+//				String codigo_barra = parts[0];
+//				String descripcion = parts[1];
+//				String cantidad = parts[2];
+//				String num_pedido = parts[4];
+//								
+//				RequestDispatcher rd;
+//				
+//				request.setAttribute("codigo_barra", codigo_barra);
+//				request.setAttribute("descripcion", descripcion);
+//				request.setAttribute("cantidad", cantidad);
+//				request.setAttribute("num_pedido", num_pedido);
+//				
+//				rd = request.getRequestDispatcher("/control_items.jsp"); // REDIRECCION
+//				rd.forward(request, response);
+//
+//			}
+//
+//		}		
 		
 	}
 

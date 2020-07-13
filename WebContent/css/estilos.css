@@ -25,12 +25,10 @@ thead {
 
 tr:nth-child(even) {
 	background-color: #ddd;
+	height: 15%;
 }
 
-td {
-	width: 35%;
-}
 
-button {
-	
+.size{
+  width: 100px;
 }
