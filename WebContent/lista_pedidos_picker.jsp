@@ -7,25 +7,23 @@
 
 <LINK REL=StyleSheet HREF="css/estilos.css" TYPE="text/css" MEDIA=screen>
 
+
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
 <link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-	crossorigin="anonymous">
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 <link
 	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-	rel="stylesheet"
-	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-	crossorigin="anonymous">
+	rel="stylesheet">
 
 
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
 <body class="p-3 mb-2 bg-light text-dark">
+
 	<h6>
 		<ins>
 			<b>BIENVENIDO:</b>
@@ -33,12 +31,12 @@
 		<mark>${usuario}</mark>
 	</h6>
 
+	<div>
+		<br> <a class="btn btn-primary" data-toggle="collapse"
+			href="login.jsp" role="button" aria-expanded="false"
+			aria-controls="collapseExample"> Cerrar sesion </a>
+	</div>
 
-	<a class="btn btn-primary" data-toggle="collapse" href="login.jsp"
-		role="button" aria-expanded="false" aria-controls="collapseExample">
-		Cerrar sesion </a>
-
-	<a class="btn btn-primary" id="a-submit"> ENVIAR </a>
 
 	<div class="table-responsive">
 		<!-- SE PUEDE QUITAR LO RESPONSIVE -->
@@ -63,20 +61,43 @@
 
 	</div>
 
-	<footer class="blockquote-footer">Creado por A.T. Ribeiro</footer>
+	<div
+		class="card-body d-flex justify-content-between align-items-center">
+		<button type="button" class="btn btn-info" id="a-submit">Preparar</button>
+		<button type="button" class="btn btn-danger" id="cancel"
+			onclick="actualizar_pagina();">Cancelar</button>
+	</div>
+
+	<!-- 	<div> -->
+	<!-- 		<button type="button" class="btn btn-info" id="a-submit">Preparar</button> -->
+	<!-- 	</div> -->
+
+	<div>
+		<br>
+		<footer class="blockquote-footer">Creado por A.T. Ribeiro</footer>
+	</div>
+	<!-- 	<a class="btn btn-primary blue-background-white" data-toggle="collapse" role="button" -->
+	<!-- 		aria-expanded="false" aria-controls="collapseExample" id="a-submit"> -->
+	<!-- 		PREPARAR </a> -->
 
 	<script type="text/javascript">
 	
-		//document.body.style.zoom="300%"
+		document.body.style.zoom="300%"
+		
+		function actualizar_pagina() {
+			
+			location.reload();			
+			
+		}
 		
 	</script>
 
-	<script type="text/javascript">
+	<script type="text/javascript">		
 				
 		if ("${bandera}" == 2) {
 	
-			alert('SESION CORRECTA');							
-	
+			alert('SESION CORRECTA');		
+				
 		}			
 	</script>
 
@@ -167,11 +188,10 @@
 				}	
   			 			
   			//console.log(data.toString().replace(/[^a-zA-Z ]/g, ""));
-  			
-  			
+  			  			
   			console.log(parametro);
         		
-  			location.href = "controller?seleccion_pedido="+ parametro;
+  			location.href = "controller?seleccion=lista_pedidos_picker_entrada"+","+con+","+parametro;
     
 		})
 
@@ -186,6 +206,8 @@
 		}
 		
 	</script>
+
+
 
 </body>
 </html>

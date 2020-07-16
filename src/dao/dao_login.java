@@ -34,12 +34,12 @@ public class dao_login {
 		return Conexion.getConnection();
 	}
 
-	public int control_usuario(String usuario, String clave) throws SQLException {
+	public String control_usuario(String usuario, String clave) throws SQLException {
 
 		String sql = null;
 		String sql2 = null;
 
-		int bandera = 0;
+		String bandera = "0";
 
 		conexion = obtenerConexion();
 
@@ -57,11 +57,11 @@ public class dao_login {
 
 			while (resultado.next()) {
 
-				bandera = 1; // SI EXISTE EL USUARIO
+				bandera = "1"; // SI EXISTE EL USUARIO
 
 			}
 
-			if (bandera == 1) {
+			if (bandera == "1") {
 
 				try {
 
@@ -77,7 +77,7 @@ public class dao_login {
 
 					while (resultado2.next()) {
 
-						bandera = 2; // CONTRASEÑA CORRECTA
+						bandera = "2"; // CONTRASEÑA CORRECTA
 
 					}
 

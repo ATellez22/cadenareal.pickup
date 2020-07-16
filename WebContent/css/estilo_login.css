@@ -25,3 +25,9 @@ html, body{
 .selected{
   background: red !important;
 }
+
+
+#rt-footer{
+	background-color: red;
+  	color : white;
+}

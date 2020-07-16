@@ -34,7 +34,7 @@
 
 					<div class="form-group">
 
-						<input type="hidden" name="seleccion" value="ingresar">
+						<input type="hidden" name="seleccion" value="login_entrada">
 
 						<!-- COLUMNA -->
 						<label for="exampleInputEmail1">Usuario:</label>
@@ -58,6 +58,7 @@
 
 
 				</form>
+												
 			</div>
 		</div>
 	</div>
@@ -66,13 +67,13 @@
 
 	<script type="text/javascript">
 	
-		//document.body.style.zoom="300%"
+		document.body.style.zoom="300%"
 		
 	</script>
 
 <script type="text/javascript">	
 
-	if (${bandera} == 0 || ${bandera} == 1) {
+	if ("${bandera}" == 0 || "${bandera}" == 1) {
 	
 		alert('DATOS INCORRECTOS');	
 	

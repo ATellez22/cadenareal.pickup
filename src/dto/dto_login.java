@@ -3,6 +3,22 @@ package dto;
 public class dto_login {
 	private String usuario;
 	private String password;
+	private String sql;
+
+	public dto_login(String usuario, String password, String sql) {
+		super();
+		this.usuario = usuario;
+		this.password = password;
+		this.sql = sql;
+	}
+
+	public String getSql() {
+		return sql;
+	}
+
+	public void setSql(String sql) {
+		this.sql = sql;
+	}
 
 	public dto_login(String usuario, String password) {
 		super();

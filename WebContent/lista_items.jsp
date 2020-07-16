@@ -31,21 +31,21 @@
 		<ins>
 			<b>USUARIO:</b>
 		</ins>
-		<mark>${usuario}</mark>
+		<mark>${usuario}</mark>		
 	</h6>
 
 	<a class="btn btn-primary" data-toggle="collapse"
-		href="controller?seleccion_pedido=cancelar_lista" role="button"
+		href="controller?seleccion=lista_items_salida" role="button"
 		aria-expanded="false" aria-controls="collapseExample"> Cancelar </a>
 
 	<div class="table-responsive">
 
 		<table border="1" id="table" class="table">
-		<thead>
-			<tr>
-				<td align="center"><b>Articulos</b></td>				
-			</tr>
-		</thead>
+			<thead>
+				<tr>
+					<td align="center"><b>Articulos</b></td>
+				</tr>
+			</thead>
 			<c:forEach var="item" items="${lista}">
 				<tr id="celda" onclick="cambiar_color_over(this)">
 					<td><c:out value="${ item.codigo_barra}"></c:out> <br> <c:out
@@ -59,11 +59,16 @@
 		</table>
 
 	</div>
-	
+
+	<form action="controller2" method="post">
+
+		<input type="hidden" class="form-control" name="seleccion"
+			id="num_pedido" size="50">
+
+	</form>
+
 	<script type="text/javascript">
-	
-		document.body.style.zoom="300%"
-		
+		document.body.style.zoom = "300%"
 	</script>
 
 	<script type="text/javascript">
@@ -78,15 +83,15 @@
 					var value2 = String(value);
 
 					//alert(value2);
-
-					location.href = "controller?seleccion_pedido="
+				
+					location.href = "controller?seleccion=lista_items_entrada"
 							+ value2.split('<br>');
 
 				});
 
 		$('.ok').on('click', function(e) {
 
-			//alert($("#table tr.selecteds td:first").html());
+			//alert($("#table tr.selecteds td:first").html());		
 
 		});
 	</script>

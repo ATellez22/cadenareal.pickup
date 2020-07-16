@@ -10,14 +10,19 @@ import java.util.List;
 
 import conexion.Conexion;
 import dto.dto_articulo;
+import dto.dto_login;
 import dto.dto_pedido;
 import dto.dto_pedido_detalle;
+import dto.dto_pedido_detalle2;
+import dto.dto_variables;
 
 public class dao_pedidos {
 
 	private static Connection conexion;
 	private static PreparedStatement sentencia, sentencia2, sentencia3;
-
+	
+	public static dto_login login = new dto_login();
+			
 	public static void borrar_detalle_pedido(String num_pedido) throws SQLException { // BORRADO TRAS DARLE GUARDAR
 
 		String sql = null;
@@ -179,7 +184,7 @@ public class dao_pedidos {
 		return listaProductos;
 	}
 
-	public List<dto_pedido> Mostrar_pedido_picker(String picker) throws SQLException { // MOSTRAR EN COLECTOR
+	public static List<dto_pedido> Mostrar_pedido_picker(String picker) throws SQLException { // MOSTRAR EN COLECTOR
 
 		ResultSet resultSet = null;
 
@@ -227,10 +232,10 @@ public class dao_pedidos {
 
 		return listaProductos;
 	}
+	
 
-	public List<dto_pedido_detalle> Mostrar_detalle_pedido_picker(String num_pedido) throws SQLException { // LA VENTANA
-																											// PARA LA
-		System.out.println("SELECCION: " + num_pedido); // VERFICACION
+	public static List<dto_pedido_detalle> Mostrar_detalle_pedido_picker(String num_ped, String num_ped2, String num_ped3,
+			String num_ped4, String num_ped5, String num_ped_consulta, int contador) throws SQLException {
 
 		ResultSet resultSet = null;
 
@@ -240,12 +245,45 @@ public class dao_pedidos {
 
 		conexion = obtenerConexion();
 
+		System.out.println("CONTADOR: " + contador);
+		
 		try {
 
-			conexion.setAutoCommit(false);
+			conexion.setAutoCommit(false);			
+			
+			if (contador == 0) {
+				
+				sql = num_ped_consulta;				
 
-			sql = "SELECT num_pedido, codigo_barra, descripcion, cantidad, seccion, obs" + "  FROM detalle_pedidos"
-					+ " WHERE num_pedido = '" + num_pedido + "'";
+			} else if (contador == 1) {
+
+				sql = "SELECT num_pedido, codigo_barra, descripcion, cantidad, seccion, obs" + "  FROM detalle_pedidos"
+						+ " WHERE num_pedido = '" + num_ped + "'";
+
+			} else if (contador == 2) {
+
+				sql = "SELECT num_pedido, codigo_barra, descripcion, cantidad, seccion, obs" + "  FROM detalle_pedidos"
+						+ " WHERE num_pedido = '" + num_ped + "' OR num_pedido = '" + num_ped2 + "'";
+
+			} else if (contador == 3) {
+
+				sql = "SELECT num_pedido, codigo_barra, descripcion, cantidad, seccion, obs" + "  FROM detalle_pedidos"
+						+ " WHERE num_pedido = '" + num_ped + "' OR num_pedido = '" + num_ped2 + "' OR num_pedido = '"
+						+ num_ped3 + "'";
+
+			} else if (contador == 4) {
+
+				sql = "SELECT num_pedido, codigo_barra, descripcion, cantidad, seccion, obs" + "  FROM detalle_pedidos"
+						+ " WHERE num_pedido = '" + num_ped + "' OR num_pedido = '" + num_ped2 + "' OR num_pedido = '"
+						+ num_ped3 + "' OR num_pedido = '" + num_ped4 + "'";
+
+			} else if (contador == 5) {
+
+				sql = "SELECT num_pedido, codigo_barra, descripcion, cantidad, seccion, obs" + "  FROM detalle_pedidos"
+						+ " WHERE num_pedido = '" + num_ped + "' OR num_pedido = '" + num_ped2 + "' OR num_pedido = '"
+						+ num_ped3 + "' OR num_pedido = '" + num_ped4 + "' OR num_pedido = '" + num_ped5 + "'";
+
+			}
 
 			sentencia = conexion.prepareStatement(sql);
 
@@ -281,8 +319,12 @@ public class dao_pedidos {
 		return listaProductos;
 	}
 
-	public String Obtener_descripcion_articulo(String codigo_barra)
-			throws SQLException { /* MÉTODO QUE EL DEVUELVE LA DESCRIPCION SOLICITADA EN control_items.jsp */
+	
+	/*
+	 * MÉTODO QUE EL DEVUELVE LA DESCRIPCION SOLICITADA EN control_items.jsp A
+	 * TRAVES DEL ESCANER O TECLADO
+	 */
+	public String Obtener_descripcion_articulo(String codigo_barra) throws SQLException {
 
 		ResultSet resultSet = null;
 
@@ -320,16 +362,15 @@ public class dao_pedidos {
 
 	}
 
-	// CONTROL TOTAL PARA ACTUALIZAR ITEMS Y GUARDAR
-
-	// 1°- VERIFICAR UNA TABLA DETALLE TEMPORAL LIBRE....
-	@SuppressWarnings({ "resource", "unused" })
-	public int validar_actualizaciones_items(String num_pedido, String codigo_barra1, int flag, String codigo_barra2,
-			String des, String can, String obs, String sec) throws SQLException {
-
-		int retorno = 0;
+	/*
+	 * MÉTODO QUE EL DEVUELVE LA CATEGORIA DEL ARTICULO SOLICITADO EN EL CONTROLLER2
+	 * PARA ACTUALIZAR LOS ITEMS
+	 */
+	public static String Obtener_categoria_articulo(String codigo_barra) throws SQLException {
 
 		ResultSet resultSet = null;
+
+		String cat = "";
 
 		conexion = obtenerConexion();
 
@@ -337,7 +378,7 @@ public class dao_pedidos {
 
 			conexion.setAutoCommit(false);
 
-			String sql = "select count(*) as total from detalle_temporal_1"; // EMPEZAR POR DETALLE 1
+			String sql = "SELECT categoria FROM articulos WHERE codigo_barra ='" + codigo_barra + "'";
 
 			sentencia = conexion.prepareStatement(sql);
 
@@ -345,185 +386,7 @@ public class dao_pedidos {
 
 			while (resultSet.next()) {
 
-				if (resultSet.getString("total").equals("0")) { // SI NO TIENE REGISTROS, MIGRAR
-
-					// MIGRACION
-					String sql2 = "INSERT INTO detalle_temporal_1 SELECT * FROM detalle_pedidos WHERE num_pedido ='"
-							+ num_pedido + "'";
-
-					sentencia2 = conexion.prepareStatement(sql2);
-
-					sentencia2.executeUpdate(sql2);
-
-					conexion.commit();
-					sentencia2.close();
-					conexion.close();
-					// MIGRACION
-
-					// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
-
-					if (flag == 1) { // LA PRIMERA MODIFICACION ES UNA CONFIRMACION
-
-						String sql3 = "UPDATE detalle_temporal_1 SET obs = 'CONFIRMADO' WHERE codigo_barra = ?";
-
-						try {
-
-							PreparedStatement sentencia = conexion.prepareStatement(sql3);
-
-							sentencia.setString(1, codigo_barra1);
-
-							sentencia.executeUpdate();
-
-						} catch (SQLException e) {
-
-							e.printStackTrace();
-
-						}
-
-					} else if (flag == 2) { // LA PRIMERA MODIFICACION ES UNA SUSTITUCION
-
-						String sql3 = "UPDATE detalle_temporal_1 SET obs = 'SUSTITUIDO POR: " + codigo_barra2
-								+ " WHERE codigo_barra = ?";
-
-						try {
-
-							PreparedStatement sentencia = conexion.prepareStatement(sql3);
-
-							sentencia.setString(1, codigo_barra1);
-
-							sentencia.executeUpdate();
-
-							String sql4 = "INSERT INTO detalle_temporal_1 (num_pedido, codigo_barra, descripcion, cantidad, seccion, obs)"
-									+ " VALUES (?, ?, ?, ?, ?, ?)";
-
-							try {
-
-								PreparedStatement sentencia2 = conexion.prepareStatement(sql4);
-
-								sentencia2.setString(1, num_pedido);
-								sentencia2.setString(2, codigo_barra2);
-								sentencia2.setString(3, des);
-								sentencia2.setString(4, can);
-								sentencia2.setString(5, sec);
-								sentencia2.setString(6, "SUSTITUTO DE: " + codigo_barra1);
-
-								sentencia2.executeUpdate();
-
-							} catch (SQLException e) {
-
-								e.printStackTrace();
-
-							}
-
-						} catch (SQLException e) {
-
-							e.printStackTrace();
-
-						}
-
-					}
-
-					// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
-
-				} else { // SI LOS TIENE, PREGUNTAR SI LO CARGADO CORRESPONDE AL NUM_PEDIDO
-
-					conexion.setAutoCommit(false);
-
-					String var;
-
-					int bandera = 0;
-
-					String sql3 = "SELECT num_pedido FROM detalle_temporal_1 WHERE num_pedido ='" + num_pedido + "'";
-
-					sentencia3 = conexion.prepareStatement(sql3);
-
-					resultSet = sentencia3.executeQuery();
-
-					while (resultSet.next()) {
-
-						var = resultSet.getString("descripcion");
-
-						bandera = 1; // SI ENCONTRÓ ESE NUMERO DE PEDIDO, PROSEGUIR CON LA ACTUALIZACIÓN
-
-					}
-
-					if (bandera == 1) { // SI ENCONTRÓ ESE NUMERO DE PEDIDO, PROSEGUIR CON LA ACTUALIZACIÓN
-
-						// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
-
-						if (flag == 1) { // LA SIGUIENTE MODIFICACION ES UNA CONFIRMACION
-
-							String sql4 = "UPDATE detalle_temporal_1 SET obs = 'CONFIRMADO' WHERE codigo_barra = ?";
-
-							try {
-
-								PreparedStatement sentencia = conexion.prepareStatement(sql4);
-
-								sentencia.setString(1, codigo_barra1);
-
-								sentencia.executeUpdate();
-
-							} catch (SQLException e) {
-
-								e.printStackTrace();
-
-							}
-
-						} else if (flag == 2) { // LA SIGUIENTE MODIFICACION ES UNA SUSTITUCION
-
-							String sql4 = "UPDATE detalle_temporal_1 SET obs = 'SUSTITUIDO POR: " + codigo_barra2
-									+ " WHERE codigo_barra = ?";
-
-							try {
-
-								PreparedStatement sentencia = conexion.prepareStatement(sql4);
-
-								sentencia.setString(1, codigo_barra1);
-
-								sentencia.executeUpdate();
-
-								String sql5 = "INSERT INTO detalle_temporal_1 (num_pedido, codigo_barra, descripcion, cantidad, seccion, obs)"
-										+ " VALUES (?, ?, ?, ?, ?, ?)";
-
-								try {
-
-									PreparedStatement sentencia2 = conexion.prepareStatement(sql5);
-
-									sentencia2.setString(1, num_pedido);
-									sentencia2.setString(2, codigo_barra2);
-									sentencia2.setString(3, des);
-									sentencia2.setString(4, can);
-									sentencia2.setString(5, sec);
-									sentencia2.setString(6, "SUSTITUTO DE: " + codigo_barra1);
-
-									sentencia2.executeUpdate();
-
-								} catch (SQLException e) {
-
-									e.printStackTrace();
-
-								}
-
-							} catch (SQLException e) {
-
-								e.printStackTrace();
-
-							}
-
-						}
-
-						// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
-
-						retorno = 1; // ACTUALIZADO
-
-					} else if (bandera == 0) { // SI NO, SIGNIFICA QUE ESTA CARGADO CON OTRO NÚMERO. PASAR AL METODO
-												// DETALLE 2
-
-						retorno = 0;
-
-					}
-
-				}
+				cat = resultSet.getString("descripcion");
 
 			}
 
@@ -537,223 +400,125 @@ public class dao_pedidos {
 
 		}
 
-		return retorno;
+		return cat;
 
 	}
 
 	// CONTROL TOTAL PARA ACTUALIZAR ITEMS Y GUARDAR
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	public int metodo(String num_pedido, String codigo_barra1, int flag, String codigo_barra2, String des, String can,
-			String obs, String sec) throws SQLException {
-
-		int retorno = 0;
+	@SuppressWarnings({ "resource", "unused" })
+	public static void actualizar_item(int flag, String num_pedido, String codigo_barra, String codigo_barra2, String des,
+			String can, String cat) throws SQLException {
 
 		ResultSet resultSet = null;
+		String sql = "", sql2 = "";
 
 		conexion = obtenerConexion();
 
+		conexion.setAutoCommit(false);
+
+		// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
+
+		if (flag == 1) {
+
+			sql = "UPDATE detalle_pedidos SET obs = 'CONFIRMADO' WHERE codigo_barra = ?";
+
+			try {
+
+				PreparedStatement sentencia = conexion.prepareStatement(sql);
+
+				sentencia.setString(1, codigo_barra);
+
+				sentencia.executeUpdate();
+
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+
+			}
+
+		} else if (flag == 2) { // LA PRIMERA MODIFICACION ES UNA SUSTITUCION
+
+			sql = "UPDATE detalle_pedidos SET obs = 'SUSTITUIDO POR: " + codigo_barra2 + " WHERE codigo_barra = ?";
+
+			try {
+
+				PreparedStatement sentencia = conexion.prepareStatement(sql);
+
+				sentencia.setString(1, codigo_barra);
+
+				sentencia.executeUpdate();
+
+				sql2 = "INSERT INTO detalle_pedidos (num_pedido, codigo_barra, descripcion, cantidad, seccion, obs)"
+						+ " VALUES (?, ?, ?, ?, ?, ?)";
+
+				try {
+
+					PreparedStatement sentencia2 = conexion.prepareStatement(sql2);
+
+					sentencia2.setString(1, num_pedido);
+					sentencia2.setString(2, codigo_barra2);
+					sentencia2.setString(3, des);
+					sentencia2.setString(4, can);
+					sentencia2.setString(5, cat);
+					sentencia2.setString(6, "SUSTITUTO DE: " + codigo_barra);
+
+					sentencia2.executeUpdate();
+
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+
+				}
+
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+
+			}
+
+		}
+
+		// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
+
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public List<dto_pedido_detalle2> Mostrar_d_p_picker_sql2() throws SQLException {
+		
+		ResultSet resultSet = null;
+
+		List<dto_pedido_detalle2> listaProductos2 = new ArrayList<>();			
+
+		conexion = obtenerConexion();
+		
+		String sql = "";
+	
 		try {
 
 			conexion.setAutoCommit(false);
-
-			String sql = "CREATE TABLE detalle_temporal_"+num_pedido 
-					+ "  num_pedido character varying(100) NOT NULL,\r\n"
-					+ "  codigo_barra character varying(100) NOT NULL,\r\n"
-					+ "  descripcion character varying(100) NOT NULL,\r\n" 
-					+ "  cantidad double precision NOT NULL,\r\n"
-					+ "  seccion character varying(100) NOT NULL,\r\n"
-					+ "  obs character varying(100) NOT NULL\r\n"
-					+ ")"; 
+			
+			dto_variables var = new dto_variables();
 
 			sentencia = conexion.prepareStatement(sql);
 
-			sentencia.executeQuery(); //EN ESTE PUNTO, SI HAY UN ERROR, SIGNIFICA QUE LA TABLA YA EXISTE. LA CONTINUIDAD PASA AL CATCH
-			
-			
+			resultSet = sentencia.executeQuery();
 
-				 // SI NO TIENE REGISTROS, MIGRAR
+			while (resultSet.next()) {
 
-					// MIGRACION
-					String sql2 = "INSERT INTO detalle_temporal_1 SELECT * FROM detalle_pedidos WHERE num_pedido ='"
-							+ num_pedido + "'";
+				dto_pedido_detalle2 det = new dto_pedido_detalle2();
 
-					sentencia2 = conexion.prepareStatement(sql2);
+				det.setNum_pedido(resultSet.getString(1));
+				det.setCodigo_barra(resultSet.getLong(2));
+				det.setDescripcion(resultSet.getString(3));
+				det.setCantidad(resultSet.getDouble(4));
+				det.setSeccion(resultSet.getString(5));
+				det.setObs(resultSet.getString(6));
 
-					sentencia2.executeUpdate(sql2);
+				listaProductos2.add(det);
 
-					conexion.commit();
-					sentencia2.close();
-					conexion.close();
-					// MIGRACION
-
-					// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
-
-					if (flag == 1) { // LA PRIMERA MODIFICACION ES UNA CONFIRMACION
-
-						String sql3 = "UPDATE detalle_temporal_1 SET obs = 'CONFIRMADO' WHERE codigo_barra = ?";
-
-						try {
-
-							PreparedStatement sentencia = conexion.prepareStatement(sql3);
-
-							sentencia.setString(1, codigo_barra1);
-
-							sentencia.executeUpdate();
-
-						} catch (SQLException e) {
-
-							e.printStackTrace();
-
-						}
-
-					} else if (flag == 2) { // LA PRIMERA MODIFICACION ES UNA SUSTITUCION
-
-						String sql3 = "UPDATE detalle_temporal_1 SET obs = 'SUSTITUIDO POR: " + codigo_barra2
-								+ " WHERE codigo_barra = ?";
-
-						try {
-
-							PreparedStatement sentencia = conexion.prepareStatement(sql3);
-
-							sentencia.setString(1, codigo_barra1);
-
-							sentencia.executeUpdate();
-
-							String sql4 = "INSERT INTO detalle_temporal_1 (num_pedido, codigo_barra, descripcion, cantidad, seccion, obs)"
-									+ " VALUES (?, ?, ?, ?, ?, ?)";
-
-							try {
-
-								PreparedStatement sentencia2 = conexion.prepareStatement(sql4);
-
-								sentencia2.setString(1, num_pedido);
-								sentencia2.setString(2, codigo_barra2);
-								sentencia2.setString(3, des);
-								sentencia2.setString(4, can);
-								sentencia2.setString(5, sec);
-								sentencia2.setString(6, "SUSTITUTO DE: " + codigo_barra1);
-
-								sentencia2.executeUpdate();
-
-							} catch (SQLException e) {
-
-								e.printStackTrace();
-
-							}
-
-						} catch (SQLException e) {
-
-							e.printStackTrace();
-
-						}
-
-					}
-
-					// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
-
-				  // SI LOS TIENE, PREGUNTAR SI LO CARGADO CORRESPONDE AL NUM_PEDIDO
-
-					conexion.setAutoCommit(false);
-
-					String var;
-
-					int bandera = 0;
-
-					String sql3 = "SELECT num_pedido FROM detalle_temporal_1 WHERE num_pedido ='" + num_pedido + "'";
-
-					sentencia3 = conexion.prepareStatement(sql3);
-
-					resultSet = sentencia3.executeQuery();
-
-					while (resultSet.next()) {
-
-						var = resultSet.getString("descripcion");
-
-						bandera = 1; // SI ENCONTRÓ ESE NUMERO DE PEDIDO, PROSEGUIR CON LA ACTUALIZACIÓN
-
-					}
-
-					if (bandera == 1) { // SI ENCONTRÓ ESE NUMERO DE PEDIDO, PROSEGUIR CON LA ACTUALIZACIÓN
-
-						// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
-
-						if (flag == 1) { // LA SIGUIENTE MODIFICACION ES UNA CONFIRMACION
-
-							String sql4 = "UPDATE detalle_temporal_1 SET obs = 'CONFIRMADO' WHERE codigo_barra = ?";
-
-							try {
-
-								PreparedStatement sentencia = conexion.prepareStatement(sql4);
-
-								sentencia.setString(1, codigo_barra1);
-
-								sentencia.executeUpdate();
-
-							} catch (SQLException e) {
-
-								e.printStackTrace();
-
-							}
-
-						} else if (flag == 2) { // LA SIGUIENTE MODIFICACION ES UNA SUSTITUCION
-
-							String sql4 = "UPDATE detalle_temporal_1 SET obs = 'SUSTITUIDO POR: " + codigo_barra2
-									+ " WHERE codigo_barra = ?";
-
-							try {
-
-								PreparedStatement sentencia = conexion.prepareStatement(sql4);
-
-								sentencia.setString(1, codigo_barra1);
-
-								sentencia.executeUpdate();
-
-								String sql5 = "INSERT INTO detalle_temporal_1 (num_pedido, codigo_barra, descripcion, cantidad, seccion, obs)"
-										+ " VALUES (?, ?, ?, ?, ?, ?)";
-
-								try {
-
-									PreparedStatement sentencia2 = conexion.prepareStatement(sql5);
-
-									sentencia2.setString(1, num_pedido);
-									sentencia2.setString(2, codigo_barra2);
-									sentencia2.setString(3, des);
-									sentencia2.setString(4, can);
-									sentencia2.setString(5, sec);
-									sentencia2.setString(6, "SUSTITUTO DE: " + codigo_barra1);
-
-									sentencia2.executeUpdate();
-
-								} catch (SQLException e) {
-
-									e.printStackTrace();
-
-								}
-
-							} catch (SQLException e) {
-
-								e.printStackTrace();
-
-							}
-
-						}
-
-						// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
-
-						retorno = 1; // ACTUALIZADO
-
-					} else if (bandera == 0) { // SI NO, SIGNIFICA QUE ESTA CARGADO CON OTRO NÚMERO. PASAR AL METODO
-												// DETALLE 2
-
-						retorno = 0;
-
-					}
-
-				
-
-			
+			}
 
 			conexion.commit();
 			sentencia.close();
@@ -765,12 +530,16 @@ public class dao_pedidos {
 
 		}
 
-		return retorno;
-
+		return listaProductos2;
 	}
 
+	
 	private static Connection obtenerConexion() throws SQLException {
 		return Conexion.getConnection();
 	}
-
+	
+	
+	
 }
+
+

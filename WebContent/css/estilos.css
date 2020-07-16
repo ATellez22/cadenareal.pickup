@@ -32,3 +32,9 @@ tr:nth-child(even) {
 .size{
   width: 100px;
 }
+
+
+.btn-primary {
+    color: #FFFFFF;
+}
+
