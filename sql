@@ -46,13 +46,13 @@ CREATE TABLE usuarios
     
     
 INSERT INTO public.pedidos(num_pedido, supervisor, picker, fecha, sucursal, estado)
-	VALUES ('0000001', 'SILVER', '-', '06-06-2020','VILLA MORRA', '-'),
-			('0000002', '-', '-', '06-06-2020', 'VILLA MORRA', '-'),
-			('0000003', '-', '-', '06-06-2020', 'VILLA MORRA', '-'),
-			('0000004', '-', '-', '06-06-2020', 'VILLA MORRA', '-'),
-			('0000005', '-', '-', '06-06-2020', 'VILLA MORRA', '-'),
-		        ('0000006', '-', '-', '06-06-2020', 'VILLA MORRA', '-'),
-			('0000007', '-', '-', '06-06-2020', 'VILLA MORRA', '-'),
+	VALUES 		('0000001', 'SILVER', '-', '06-06-2020','VILLA MORRA', '-'),
+			('0000002', '-', 'RVALDEZ', '06-06-2020', 'VILLA MORRA', '-'),
+			('0000003', '-', 'DGIMENEZ', '06-06-2020', 'VILLA MORRA', '-'),
+			('0000004', '-', 'ECARDOZO', '06-06-2020', 'VILLA MORRA', '-'),
+			('0000005', '-', 'RVALDEZ', '06-06-2020', 'VILLA MORRA', '-'),
+		        ('0000006', '-', 'ECARDOZO', '06-06-2020', 'VILLA MORRA', '-'),
+			('0000007', '-', 'RVALDEZ', '06-06-2020', 'VILLA MORRA', '-'),
 			('0000008', '-', '-', '06-06-2020', 'VILLA MORRA', '-'),
 			('0000009', '-', '-', '06-06-2020', 'VILLA MORRA', '-'),
 			('0000010', '-', '-', '06-06-2020', 'VILLA MORRA', '-'),
@@ -65,6 +65,7 @@ INSERT INTO public.pedidos(num_pedido, supervisor, picker, fecha, sucursal, esta
 			('0000017', '-', '-', '06-06-2020', 'SAN VICENTE', '-'),
 			('0000018', '-', '-', '06-06-2020', 'SAN VICENTE', '-'),
 			('0000019', '-', '-', '06-06-2020', 'SAN VICENTE', '-');
+	
 	
 INSERT INTO public.detalle_pedidos(num_pedido, codigo_barra, descripcion, cantidad, seccion, obs)
 	VALUES ('0000001', '8001', 'PEPSI', 5, '-', '-'),
