@@ -345,7 +345,7 @@
 	</script>
 
 	<script type="text/javascript">
-		function confirmar() {//VALIDAR EL CODIGO INGRESADO ANTES DEL SUBMIT
+		function confirmar() { //VALIDAR EL CODIGO INGRESADO ANTES DEL SUBMIT
 
 			var codigo2 = "";
 			var codigo1 = "";
