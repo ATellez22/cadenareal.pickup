@@ -95,6 +95,28 @@
 
 		});
 	</script>
+	
+	<script type="text/javascript"> //CAMBIOS DE COLOR
+		var table = document.getElementById('table');
+		var cells = table.getElementsByTagName('td');
+
+		for (var i = 0, len = cells.length; i < len; i++) {
+
+			if ((cells[i].innerHTML.includes('CONFIRMADO')) === true) {
+
+				cells[i].style.backgroundColor = "#66ff33";
+
+			} else if ((cells[i].innerHTML.includes('SUSTITUIDO POR')) === true) {
+
+				cells[i].style.backgroundColor = "#FFA500";
+
+			} else if ((cells[i].innerHTML.includes('SUSTITUTO DE')) === true) {
+
+				cells[i].style.backgroundColor = "#ADD8E6";
+
+			}
+		}
+	</script>
 
 	<script type="text/javascript">
 		function cambiar_color_over(celda) {
