@@ -52,7 +52,7 @@ public class dao_pedidos {
 
 	}
 
-	public void guardar_detalle_pedidos(dto_pedido_detalle detalle) throws SQLException { // INSERCIÓN DE NUEVOS VALORES
+	public void guardar_detalle_pedidos(dto_pedido_detalle detalle) throws SQLException { // INSERCIÃ“N DE NUEVOS VALORES
 
 		String sql = null;
 
@@ -321,7 +321,7 @@ public class dao_pedidos {
 
 	
 	/*
-	 * MÉTODO QUE EL DEVUELVE LA DESCRIPCION SOLICITADA EN control_items.jsp A
+	 * MÃ‰TODO QUE EL DEVUELVE LA DESCRIPCION SOLICITADA EN control_items.jsp A
 	 * TRAVES DEL ESCANER O TECLADO
 	 */
 	public String Obtener_descripcion_articulo(String codigo_barra) throws SQLException {
@@ -363,7 +363,7 @@ public class dao_pedidos {
 	}
 
 	/*
-	 * MÉTODO QUE EL DEVUELVE LA CATEGORIA DEL ARTICULO SOLICITADO EN EL CONTROLLER2
+	 * MÃ‰TODO QUE EL DEVUELVE LA CATEGORIA DEL ARTICULO SOLICITADO EN EL CONTROLLER2
 	 * PARA ACTUALIZAR LOS ITEMS
 	 */
 	public static String Obtener_categoria_articulo(String codigo_barra) throws SQLException {
@@ -406,12 +406,11 @@ public class dao_pedidos {
 
 	// CONTROL TOTAL PARA ACTUALIZAR ITEMS Y GUARDAR
 
-	@SuppressWarnings({ "resource", "unused" })
-	public static void actualizar_item(int flag, String num_pedido, String codigo_barra, String codigo_barra2, String des,
-			String can, String cat) throws SQLException {
+	@SuppressWarnings({ "unused" })
+	public static void actualizar_item(int flag, String num_pedido, String codigo_barra, String codigo_barra2,
+			String des, Double can, String cat) throws SQLException {
 
 		ResultSet resultSet = null;
-		String sql = "", sql2 = "";
 
 		conexion = obtenerConexion();
 
@@ -421,13 +420,14 @@ public class dao_pedidos {
 
 		if (flag == 1) {
 
-			sql = "UPDATE detalle_pedidos SET obs = 'CONFIRMADO' WHERE codigo_barra = ?";
-
 			try {
 
-				PreparedStatement sentencia = conexion.prepareStatement(sql);
+				PreparedStatement sentencia = conexion.prepareStatement(
+						"UPDATE detalle_pedidos SET obs = ? WHERE (num_pedido = ?) AND (codigo_barra = ?)");
 
-				sentencia.setString(1, codigo_barra);
+				sentencia.setString(1, "CONFIRMADO");
+				sentencia.setString(2, num_pedido);
+				sentencia.setString(3, codigo_barra);
 
 				sentencia.executeUpdate();
 
@@ -437,29 +437,39 @@ public class dao_pedidos {
 
 			}
 
-		} else if (flag == 2) { // LA PRIMERA MODIFICACION ES UNA SUSTITUCION
+		} else if (flag == 2) {
 
-			sql = "UPDATE detalle_pedidos SET obs = 'SUSTITUIDO POR: " + codigo_barra2 + " WHERE codigo_barra = ?";
+			int bandera = 0;
 
 			try {
 
-				PreparedStatement sentencia = conexion.prepareStatement(sql);
-
-				sentencia.setString(1, codigo_barra);
+				PreparedStatement sentencia = conexion
+						.prepareStatement("UPDATE detalle_pedidos SET obs = 'SUSTITUIDO POR: " + codigo_barra2
+								+ "' WHERE codigo_barra LIKE '" + codigo_barra + "' AND num_pedido LIKE '" + num_pedido
+								+ "'");
 
 				sentencia.executeUpdate();
 
-				sql2 = "INSERT INTO detalle_pedidos (num_pedido, codigo_barra, descripcion, cantidad, seccion, obs)"
-						+ " VALUES (?, ?, ?, ?, ?, ?)";
+				bandera = 1;
+
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+
+			}
+
+			if (bandera == 1) {
 
 				try {
 
-					PreparedStatement sentencia2 = conexion.prepareStatement(sql2);
+					PreparedStatement sentencia2 = conexion.prepareStatement(
+							"INSERT INTO detalle_pedidos(num_pedido, codigo_barra, descripcion, cantidad, seccion, obs)"
+									+ "  VALUES (?, ?, ?, ?, ?, ?)");
 
 					sentencia2.setString(1, num_pedido);
 					sentencia2.setString(2, codigo_barra2);
 					sentencia2.setString(3, des);
-					sentencia2.setString(4, can);
+					sentencia2.setDouble(4, Double.valueOf(can));
 					sentencia2.setString(5, cat);
 					sentencia2.setString(6, "SUSTITUTO DE: " + codigo_barra);
 
@@ -471,10 +481,6 @@ public class dao_pedidos {
 
 				}
 
-			} catch (SQLException e) {
-
-				e.printStackTrace();
-
 			}
 
 		}
@@ -482,6 +488,7 @@ public class dao_pedidos {
 		// VALIDACIONES PARA CONFIRMAR O SUSTITUIR
 
 	}
+
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
